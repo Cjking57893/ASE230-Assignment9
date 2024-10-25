@@ -3,6 +3,7 @@
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
+    include '../Team_Member.php'
 ?>
 
 <!DOCTYPE html>
@@ -49,11 +50,11 @@
          <div class="container position-absolute top-50 start-50 translate-middle">
             <h2>Edit employee information:</h2>
             <?php
-                create_form_for_editing("../../data/team.csv", $_GET['emp_num']);
+                Team_Member::createEditForm("../../data/team.csv", $_GET['emp_num']);
 
                 if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     //call function to create team member
-                    edit_member_info("../../data/team.csv", $_GET['emp_num'], $_POST['name'], $_POST['position'], $_POST['desc']);
+                    Team_Member::editTeamMemberInfo("../../data/team.csv", $_GET['emp_num'], $_POST['name'], $_POST['position'], $_POST['desc']);
                     //refresh the page to display new info
                     header("refresh: 1");
                 }

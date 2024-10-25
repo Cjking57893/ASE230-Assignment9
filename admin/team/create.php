@@ -3,6 +3,7 @@
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
+    include '../Team_Member.php'
 ?>
 
 <!DOCTYPE html>
@@ -72,7 +73,7 @@
         <?php
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
             //call function to create team member
-            create_team_member("../../data/team.csv", $_POST['num'], $_POST['name'], $_POST['position'], $_POST['desc']);
+            Team_Member::createTeamMember("../../data/team.csv", $_POST['num'], $_POST['name'], $_POST['position'], $_POST['desc']);
             }
         ?>
         <!-- javascript -->

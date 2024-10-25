@@ -2,6 +2,7 @@
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
+    include '../Team_Member.php';
 ?>
 
 <!DOCTYPE html>
@@ -61,7 +62,7 @@
                 </thead>
                 <tbody class="table-group-divider">
                     <?php
-                        read_teams_admin_index("../../data/team.csv");
+                        Team_Member::displayTeamAdmin("../../data/team.csv");
                     ?>
                 </tbody>
             </table>

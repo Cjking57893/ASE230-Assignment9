@@ -2,6 +2,7 @@
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
+    include '../Team_Member.php';
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +40,7 @@
                     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                         $employeeNumberToDelete = $_POST['employeeNumber'];
                         $filename = '../../data/team.csv'; // Path to your CSV file
-                        delete_team_member("../../data/team.csv", $_GET['emp_num']);
+                        Team_Member::deleteTeamMember("../../data/team.csv", $_GET['emp_num']);
                         //redirect back to index
                         header("Location: index.php");
                         exit; // Stop script execution

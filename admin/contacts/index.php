@@ -2,6 +2,7 @@
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
+    include '../Contact.php';
 ?>
 
 <!DOCTYPE html>
@@ -60,7 +61,7 @@
                 </thead>
                 <tbody class="table-group-divider">
                     <?php
-                        read_contacts_admin_index("../../data/contacts.csv");
+                        Contact::readContactsAdminIndex("../../data/contacts.csv");
                     ?>
                 </tbody>
             </table>

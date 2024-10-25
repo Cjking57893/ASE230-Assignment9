@@ -2,6 +2,7 @@
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
+    include '../Contact.php';
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +40,7 @@
                     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                         $phoneNumberToDelete = $_POST['contactPhone'];
                         $filename = '../../data/contacts.csv'; // Path to your CSV file
-                        delete_contact("../../data/contacts.csv", $_GET['contact_phone']);
+                        Contact::deleteContact("../../data/contacts.csv", $_GET['contact_phone']);
                         //redirect back to index
                         header("Location: index.php");
                         exit; // Stop script execution

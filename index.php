@@ -2,6 +2,7 @@
     include 'lib/csv_functions.php';
     include 'lib/readJsonFile.php';
     include 'lib/plainfunction.php';
+    include 'admin/Team_Member.php';
     $productsAndServices = readJsonFile('./data/products_and_services.json');
 ?>
 <!DOCTYPE html>
@@ -146,7 +147,7 @@
                 <!-- end row -->
                 <div class="row">
                     <?php 
-                        read_csv_team('data/team.csv')
+                        Team_Member::displayTeamIndex('data/team.csv')
                     ?>
                 </div>
                 <!-- end row -->
