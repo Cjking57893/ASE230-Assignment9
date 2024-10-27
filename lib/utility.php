@@ -17,31 +17,24 @@
 
 // Removes an entity from the JSON file based on its ID.
 // It filters the array to exclude the specified entity and then writes the filtered data back to the file. -->
-$filePath = __DIR__ . '/../../data/teamCRUD.json'
-$filePath = __DIR__ . '/../../data/contactCRUD.json'
 
+function addItem($filename, $newItem) {
 
-readAll()
+    // Checking if file exists and reading it if it does.
+    if (file_exists($filename)) {
+        $jsonContent = file_get_contents($filename);
+        $data = json_decode($jsonContent, true);
+    }
+    else {
+        die('Error: Could not read the JSON file');
+    }
 
-<?php if (empty($productsAndServices)): ?>
-                    <tr>
-                        <td colspan="4" class="text-center">No products available.</td>
-                    </tr>
-                <?php else: ?>
-                    <?php foreach ($productsAndServices as $index => $product): ?>
-                    <tr>
-                        <td><?= $index + 1; ?></td>
-                        <td><?= htmlspecialchars($product['name']); ?></td>
-                        <td><?= htmlspecialchars($product['description']); ?></td>
-                        <td>
-                            <a href="detail.php?name=<?= urlencode($product['name']); ?>" class="btn btn-info btn-sm">View</a>
-                            <a href="edit.php?name=<?= urlencode($product['name']); ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="delete.php?name=<?= urlencode($product['name']); ?>" class="btn btn-danger btn-sm" 
-                               onclick="return confirm('Are you sure you want to delete this product?');">Delete</a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+    // Adding new item to array.
+    $data[] = $newItem;
 
+    // Encoding the array back into JSON format.
+    $jsonData = json_encode($data, JSON_PRETTY_PRINT);
 
-                ?>
+    // Writing the updated JSON back in the file.
+    file_put_contents($filename, $jsonData);
+}
