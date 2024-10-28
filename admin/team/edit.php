@@ -54,11 +54,12 @@
                 create_form_for_editing("../../data/teamCRUD.json", $_GET['index']);
 
                 if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                    $teamMember = new Team_Member($_POST['name'], null, $_POST['title'], $_POST['about']);
                     //call function to create team member
                     JSONHelper::updateItem('../../data/teamCRUD.json', $_GET['index'], [
-                        'name' => $_POST['name'], 
-                        'title' => $_POST['title'], 
-                        'about' => $_POST['about']
+                        'name' => $teamMember->getName(), 
+                        'title' => $teamMember->getRole(), 
+                        'about' => $teamMember->getDescription()
                     ]);
                     //refresh the page to display new info
                     header("refresh: 0");

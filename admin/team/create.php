@@ -69,11 +69,12 @@
 
         <?php
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $teamMember = new Team_Member($_POST['name'], null, $_POST['title'], $_POST['about']);
             //call function to create team member
             JSONHelper::createItem("../../data/teamCRUD.json", [
-                'name' => $_POST['name'], 
-                'title' => $_POST['title'], 
-                'about' => $_POST['about']
+                'name' => $teamMember->getName(), 
+                'title' => $teamMember->getRole(), 
+                'about' => $teamMember->getDescription()
             ]);
             }
         ?>
