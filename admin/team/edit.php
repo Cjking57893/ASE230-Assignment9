@@ -1,5 +1,6 @@
 <?php 
     ob_start();
+    require_once __DIR__ . '/../../lib/utility.php';
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
@@ -50,13 +51,17 @@
          <div class="container position-absolute top-50 start-50 translate-middle">
             <h2>Edit employee information:</h2>
             <?php
-                Team_Member::createEditForm("../../data/team.csv", $_GET['emp_num']);
+                create_form_for_editing("../../data/teamCRUD.json", $_GET['index']);
 
                 if($_SERVER['REQUEST_METHOD'] === 'POST'){
                     //call function to create team member
-                    Team_Member::editTeamMemberInfo("../../data/team.csv", $_GET['emp_num'], $_POST['name'], $_POST['position'], $_POST['desc']);
+                    JSONHelper::updateItem('../../data/teamCRUD.json', $_GET['index'], [
+                        'name' => $_POST['name'], 
+                        'title' => $_POST['title'], 
+                        'about' => $_POST['about']
+                    ]);
                     //refresh the page to display new info
-                    header("refresh: 1");
+                    header("refresh: 0");
                 }
             ?>   
          </div>

@@ -1,84 +1,90 @@
-<?php 
-    include '../../lib/csv_functions.php';
-    include '../../lib/readJsonFile.php';
-    include '../../lib/plainfunction.php';
-    include '../Contact.php';
+<?php
+require_once __DIR__ . '/../../lib/utility.php';
+
+$teamFilePath = __DIR__ . '/../../data/teamCRUD.json';
+$contactFilePath = __DIR__ . '/../../data/contactCRUD.json';
+
+$selectedFile = 'contact';
+$filePath = ($selectedFile === 'contact') ? $contactFilePath : $teamFilePath;
+
+if (isset($_GET['delete'])) {
+    $indexToDelete = (int)$_GET['delete'];
+    JSONHelper::delete($filePath, $indexToDelete);
+
+    header("Location: index.php?file=$selectedFile");
+    exit;
+}
+
+$records = JSONHelper::readAll($filePath);
+
+$tableHeaders = ($selectedFile === 'contact') 
+    ? ['Name', 'Number', 'Email'] 
+    : ['Name', 'Description'];
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Admin - Contacts Index</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Premium Bootstrap 5 Landing Page Template" />
-        <meta name="keywords" content="bootstrap 5, premium, marketing, multipurpose" />
-        <meta content="Themesbrand" name="author" />
-        <!-- favicon -->
-        <link rel="shortcut icon" href="images/favicon.ico" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View and Delete Records</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">View and Delete Records</h1>
 
-        <!-- css -->
-        <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="../../css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
-        <link href="../../css/style.min.css" rel="stylesheet" type="text/css" />
-    </head>
-
-    <body>
-        <!--Navbar Start-->
-        <nav class="navbar navbar-expand-lg navbar-light navbar-custom" id="navbar">
-            <div class="container">
-                <!-- LOGO -->
-                <a class="navbar-brand logo" href="index-1.html">
-                    <img src="images/logo-dark.png" alt="" class="logo-dark" height="28" />
-                    <img src="images/logo-light.png" alt="" class="logo-light" height="28" />
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav ms-auto navbar-center" id="navbar-navlist">
-                        <li class="nav-item">
-                            <a href="index.php" class="nav-link active">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../../index.php" class="nav-link active">Back To Main Page</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <!-- end container -->
-        </nav>
-        <!-- Navbar End -->
-        <!--Display table with all team members-->
-        <div class="container col-12">
-            <table class="table">
-                <thead>
-                    <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Email</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    <?php
-                        Contact::readContactsAdminIndex("../../data/contacts.csv");
-                    ?>
-                </tbody>
-            </table>
+    <form method="POST" class="mb-3">
+        <div class="form-group">
+            <label for="file">Select File:</label>
+            <select name="file" id="file" class="form-control" onchange="this.form.submit()">
+                
+                <option value="contact" <?= ($selectedFile === 'contact') ? 'selected' : '' ?>>Contact CRUD</option>
+            </select>
         </div>
+    </form>
 
-        <div class="container">
-            <a href="create.php"><button type="button" class="btn btn-dark">+ Create</button></a>
-        </div>
-        
-        <!-- javascript -->
-        <script src="../../js/bootstrap.bundle.min.js"></script>
-        <script src="../../js/smooth-scroll.polyfills.min.js"></script>
-
-        <script src="https://unpkg.com/feather-icons"></script>
-
-        <!-- App Js -->
-        <script src="js/app.js"></script>
-    </body>
-
+    <div class="row justify-content-center">
+        <a href="create.php" class="btn btn-primary mb-3">Create</a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <?php foreach ($tableHeaders as $header): ?>
+                    <th><?= htmlspecialchars($header); ?></th>
+                <?php endforeach; ?>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (empty($records)): ?>
+                <tr>
+                    <td colspan="<?= count($tableHeaders) + 2; ?>" class="text-center">No records available.</td>
+                </tr>
+            <?php else: ?>
+                <?php foreach ($records as $index => $record): ?>
+                <tr>
+                    <td><?= $index + 1; ?></td>
+                    <?php if ($selectedFile === 'contact'): ?>
+                        <td><?= htmlspecialchars($record['name']); ?></td>
+                        <td><?= htmlspecialchars($record['number']); ?></td>
+                        <td><?= htmlspecialchars($record['email']); ?></td>
+                    <?php else: ?>
+                        <td><?= htmlspecialchars($record['name']); ?></td>
+                        <td><?= htmlspecialchars($record['about']); ?></td>
+                    <?php endif; ?>
+                    <td>
+                        <a href="edit.php?file=<?= $selectedFile ?>&index=<?= $index; ?>" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="index.php?file=<?= $selectedFile ?>&delete=<?= $index; ?>" 
+                           class="btn btn-danger btn-sm" 
+                           onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+</body>
 </html>

@@ -1,17 +1,14 @@
-<?php
-    ob_start();
-    require_once __DIR__ . '/../../lib/utility.php';
+<?php 
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
-    include '../Team_Member.php'
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Admin - Team Member Detail</title>
+        <title>Admin - Team Index</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="Premium Bootstrap 5 Landing Page Template" />
         <meta name="keywords" content="bootstrap 5, premium, marketing, multipurpose" />
@@ -42,41 +39,38 @@
                         <li class="nav-item">
                             <a href="index.php" class="nav-link active">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="../../index.php" class="nav-link active">Back To Main Page</a>
+                        </li>
                     </ul>
                 </div>
             </div>
             <!-- end container -->
         </nav>
         <!-- Navbar End -->
-         <div class="container position-absolute top-50 start-50 translate-middle">
-            <h2>Enter employee information:</h2>
-            <form method="post" action="">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Employee Name</label>
-                        <input type="text" class="form-control w-25" id="name"  name="name" style="border-color: black">
-                    </div>
-                    <div class="mb-3">
-                        <label for="position" class="form-label">Employee Position</label>
-                        <input type="text" class="form-control w-25" id="title"  name="title" style="border-color: black">
-                    </div>
-                    <div class="mb-3">
-                        <label for="desc" class="form-label">Bio</label>
-                        <textarea type="text" class="form-control" id="about" rows="3" name="about" style="border-color: black"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-         </div>
+        <!--Display table with all team members-->
+        <div class="container col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <?php
+                        read_teams_admin_index("../../data/team.csv");
+                    ?>
+                </tbody>
+            </table>
+        </div>
 
-        <?php
-            if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            //call function to create team member
-            JSONHelper::createItem("../../data/teamCRUD.json", [
-                'name' => $_POST['name'], 
-                'title' => $_POST['title'], 
-                'about' => $_POST['about']
-            ]);
-            }
-        ?>
+        <div class="container">
+            <a href="create.php"><button type="button" class="btn btn-dark">+ Create</button></a>
+        </div>
+        
         <!-- javascript -->
         <script src="../../js/bootstrap.bundle.min.js"></script>
         <script src="../../js/smooth-scroll.polyfills.min.js"></script>
@@ -87,4 +81,4 @@
         <script src="js/app.js"></script>
     </body>
 
-</html>   
+</html>
