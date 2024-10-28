@@ -1,47 +1,42 @@
 <?php
-// <!-- create($entity):
+class JSONHelper
+{
+    public static function readAll($filePath)
+    {
+        if (!file_exists($filePath)) {
+            self::saveAll($filePath, []);
+        }
 
-// Adds a new entity (a contact or team member) to the JSON file.
-// It reads the existing data, adds the new entity to the array, and writes the updated data back to the file.
+        $jsonContent = file_get_contents($filePath);
+        return json_decode($jsonContent, true) ?? [];
+    }
 
-// readAll():
+    private static function saveAll($filePath, $data)
+    {
+        $directory = dirname($filePath);
 
-// Reads all entities from the JSON file and returns them as an array.
-// If the file doesn’t exist, it returns an empty array.
+        if (!is_dir($directory)) {
+            if (!mkdir($directory, 0777, true)) {
+                echo "Error: Unable to create directory $directory.";
+                return;
+            }
+        }
 
-// update($updatedEntity, $id):
+        $jsonContent = json_encode($data, JSON_PRETTY_PRINT);
+        if (file_put_contents($filePath, $jsonContent) === false) {
+            echo "Error: Unable to write to file $filePath.";
+        }
+    }
 
-// Finds an entity by its ID in the JSON data, updates it with the new information, and saves the changes back to the file.
+    public static function delete($filePath, $index)
+    {
+        $data = self::readAll($filePath);
 
-// delete($id):
+        if (isset($data[$index])) {
+            unset($data[$index]);
+            $data = array_values($data); 
+            self::saveAll($filePath, $data);
+        }
+    }
+}
 
-// Removes an entity from the JSON file based on its ID.
-// It filters the array to exclude the specified entity and then writes the filtered data back to the file. -->
-$filePath = __DIR__ . '/../../data/teamCRUD.json'
-$filePath = __DIR__ . '/../../data/contactCRUD.json'
-
-
-readAll()
-
-<?php if (empty($productsAndServices)): ?>
-                    <tr>
-                        <td colspan="4" class="text-center">No products available.</td>
-                    </tr>
-                <?php else: ?>
-                    <?php foreach ($productsAndServices as $index => $product): ?>
-                    <tr>
-                        <td><?= $index + 1; ?></td>
-                        <td><?= htmlspecialchars($product['name']); ?></td>
-                        <td><?= htmlspecialchars($product['description']); ?></td>
-                        <td>
-                            <a href="detail.php?name=<?= urlencode($product['name']); ?>" class="btn btn-info btn-sm">View</a>
-                            <a href="edit.php?name=<?= urlencode($product['name']); ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="delete.php?name=<?= urlencode($product['name']); ?>" class="btn btn-danger btn-sm" 
-                               onclick="return confirm('Are you sure you want to delete this product?');">Delete</a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-
-
-                ?>
