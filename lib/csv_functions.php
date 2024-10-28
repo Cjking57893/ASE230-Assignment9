@@ -430,39 +430,51 @@
         }
     }
     // Function creates form with contact data already inside
-    function create_form_for_editing_contact($file_path, $contact_phone) {
-        // Check if the file exists before opening
-        if (file_exists($file_path)) {
-            // Open file for reading
-            $file = fopen($file_path, 'r');
-            
-            // Loop through CSV file
-            while (($section = fgetcsv($file)) !== false) {
-                // Check if the contact phone matches the one in the URL
-                if ($section[1] == $contact_phone) {
-                    echo "<form method=\"post\" action=\"\">
-                        <div class=\"mb-3\">
-                            <label for=\"name\" class=\"form-label\">Contact Name</label>
-                            <input type=\"text\" class=\"form-control w-25\" id=\"name\" name=\"name\" value=\"{$section[0]}\" style=\"border-color: black\">
-                        </div>
-                        <div class=\"mb-3\">
-                            <label for=\"phone\" class=\"form-label\">Phone Number</label>
-                            <input type=\"tel\" class=\"form-control w-25\" id=\"phone\" name=\"phone\" value=\"{$section[1]}\" style=\"border-color: black\" pattern=\"\\d{3}-\\d{3}-\\d{4}\" placeholder=\"123-456-7890\">
-                        </div>
-                        <div class=\"mb-3\">
-                            <label for=\"email\" class=\"form-label\">Email Address</label>
-                            <input type=\"email\" class=\"form-control w-25\" id=\"email\" name=\"email\" value=\"{$section[2]}\" style=\"border-color: black\" placeholder=\"example@example.com\">
-                        </div>
-                        <button type=\"submit\" class=\"btn btn-primary\">Save Changes</button>
-                    </form>";
-                }
-            }
-            // Close the file after reading
-            fclose($file);
-        } else {
+    function create_form_for_editing_contact($file_path, $index) {
+        // Check if the JSON file exists
+        if (!file_exists($file_path)) {
             echo 'File not found.';
+            return;
         }
+    
+        // Read and decode the JSON file content
+        $jsonContent = file_get_contents($file_path);
+        $data = json_decode($jsonContent, true);
+    
+        // Check if decoding was successful
+        if ($data === null) {
+            echo 'Error: Could not decode JSON data';
+            return;
+        }
+    
+        // Check if the specified index exists in the data array
+        if (!isset($data[$index])) {
+            echo 'Error: Index out of bounds';
+            return;
+        }
+    
+        // Retrieve the contact at the specified index
+        $contact = $data[$index];
+    
+        // Render the form with values from the JSON data
+        echo "<form method=\"post\" action=\"\">
+                <div class=\"mb-3\">
+                    <label for=\"name\" class=\"form-label\">Contact Name</label>
+                    <input type=\"text\" class=\"form-control w-25\" id=\"name\" name=\"name\" value=\"{$contact['name']}\" style=\"border-color: black\">
+                </div>
+                <div class=\"mb-3\">
+                    <label for=\"phone\" class=\"form-label\">Phone Number</label>
+                    <input type=\"tel\" class=\"form-control w-25\" id=\"number\" name=\"number\" value=\"{$contact['number']}\" style=\"border-color: black\" pattern=\"\\d{3}-\\d{3}-\\d{4}\" placeholder=\"123-456-7890\">
+                </div>
+                <div class=\"mb-3\">
+                    <label for=\"email\" class=\"form-label\">Email Address</label>
+                    <input type=\"email\" class=\"form-control w-25\" id=\"email\" name=\"email\" value=\"{$contact['email']}\" style=\"border-color: black\" placeholder=\"example@example.com\">
+                </div>
+                <button type=\"submit\" class=\"btn btn-primary\">Save Changes</button>
+            </form>";
     }
+    
+    
 
     //function edits entry in the csv file according to input from edit form
     function edit_contact_info($file_path, $contact_name, $contact_phone, $contact_email){
