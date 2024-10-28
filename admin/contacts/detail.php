@@ -2,6 +2,7 @@
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
+    include '../Contact.php';
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +49,7 @@
 
         <div class="container">
             <?php 
-                read_contact_admin_detail("../../data/contacts.csv",$_GET['contact_phone']);
+                Contact::readContactAdminDetail("../../data/contacts.csv",$_GET['contact_phone']);
                 echo "<a href=\"edit.php?contact_phone=$_GET[contact_phone]\"><button type=\"button\" class=\"btn btn-dark\">Edit</button></a>
                       <a href=\"delete.php?contact_phone=$_GET[contact_phone]\"><button type=\"button\" class=\"btn btn-danger\">Delete</button></a>"
             ?>

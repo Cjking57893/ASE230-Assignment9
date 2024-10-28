@@ -2,6 +2,7 @@
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
+    include '../Team_Member.php';
 ?>
 
 <!DOCTYPE html>
@@ -48,7 +49,7 @@
 
         <div class="container">
             <?php 
-                read_teams_admin_detail("../../data/team.csv",$_GET['emp_num']);
+                Team_Member::readTeamAdminDetail("../../data/team.csv",$_GET['emp_num']);
                 echo "<a href=\"edit.php?emp_num=$_GET[emp_num]\"><button type=\"button\" class=\"btn btn-dark\">Edit</button></a>
                       <a href=\"delete.php?emp_num=$_GET[emp_num]\"><button type=\"button\" class=\"btn btn-danger\">Delete</button></a>"
             ?>

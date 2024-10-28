@@ -453,7 +453,7 @@
             return;
         }
     
-        // Retrieve the contact at the specified index
+        // Find the contact at the specified index
         $contact = $data[$index];
     
         // Render the form with values from the JSON data
