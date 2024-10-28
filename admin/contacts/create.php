@@ -71,11 +71,12 @@
 
         <?php
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $contact = new Contact($_POST['name'], $_POST['number'], $_POST['email']);
             //call function to create team member
             JSONHelper::createItem("../../data/contactCRUD.json", [
-                'name' => $_POST['name'], 
-                'number' => $_POST['number'], 
-                'email' => $_POST['email']
+                'name' => $contact->getName(), 
+                'number' => $contact->getPhoneNumber(), 
+                'email' => $contact->getEmail()
             ]);            
             }
         ?>

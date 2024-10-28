@@ -54,11 +54,12 @@
                 create_form_for_editing_contact("../../data/contactCRUD.json", $_GET['index']);
 
                 if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                    $contact = new Contact($_POST['name'], $_POST['number'], $_POST['email']);
                     //call function to edit team member
                     JSONHelper::updateItem("../../data/contactCRUD.json", $_GET['index'], [
-                        'name' => $_POST['name'], 
-                        'number' => $_POST['number'], 
-                        'email' => $_POST['email']
+                        'name' => $contact->getName(), 
+                        'number' => $contact->getPhoneNumber(), 
+                        'email' => $contact->getEmail()
                     ]);
                     //refresh the page to display new info
                     header("refresh: 0");
