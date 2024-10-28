@@ -286,36 +286,47 @@
     }   
 
     //function creates form with team member data already inside.
-    function create_form_for_editing($file_path, $emp_num){
-        //open file for reading
-        $file = fopen($file_path, 'r');
-        if(file_exists($file_path)){
-            while (($section = fgetcsv($file)) !== false) {
-                // Check if the emp number matches the emp number in the URL
-                if ($section[0] == $emp_num) {
-                    echo "<form method=\"post\" action=\"\">
-                    <div class=\"mb-3\">
-                        <label for=\"num\" class=\"form-label\">Employee Number</label>
-                        <input type=\"text\" class=\"form-control w-25\" id=\"num\" name=\"num\" value=\"$section[0]\" disabled>
-                    </div>
-                    <div class=\"mb-3\">
-                        <label for=\"name\" class=\"form-label\">Employee Name</label>
-                        <input type=\"text\" class=\"form-control w-25\" id=\"name\"  name=\"name\" value=\"$section[1]\" style=\"border-color: black\">
-                    </div>
-                    <div class=\"mb-3\">
-                        <label for=\"position\" class=\"form-label\">Employee Position</label>
-                        <input type=\"text\" class=\"form-control w-25\" id=\"position\"  name=\"position\" value=\"$section[2]\" style=\"border-color: black\">
-                    </div>
-                    <div class=\"mb-3\">
-                        <label for=\"desc\" class=\"form-label\">Bio</label>
-                        <input type=\"text\" class=\"form-control\" id=\"desc\" rows=\"3\" name=\"desc\" value=\"$section[3]\" style=\"border-color: black\">
-                    </div>
-                    <button type=\"submit\" class=\"btn btn-primary\">Save Changes</button>
-                </form>";
-                }
-            }
+    function create_form_for_editing($file_path, $index) {
+        // Check if the JSON file exists
+        if (!file_exists($file_path)) {
+            die('Error: File not found');
         }
+    
+        // Read and decode the JSON file content
+        $jsonContent = file_get_contents($file_path);
+        $data = json_decode($jsonContent, true);
+    
+        // Check if decoding was successful
+        if ($data === null) {
+            die('Error: Could not decode JSON data');
+        }
+    
+        // Check if the specified index exists in the data array
+        if (!isset($data[$index])) {
+            die('Error: Index out of bounds');
+        }
+    
+        // Finding employee at the specified index
+        $employee = $data[$index];
+    
+        // Render the form with values from the JSON data
+        echo "<form method=\"post\" action=\"\">
+                <div class=\"mb-3\">
+                    <label for=\"name\" class=\"form-label\">Employee Name</label>
+                    <input type=\"text\" class=\"form-control w-25\" id=\"name\" name=\"name\" value=\"{$employee['name']}\" style=\"border-color: black\">
+                </div>
+                <div class=\"mb-3\">
+                    <label for=\"title\" class=\"form-label\">Employee Title</label>
+                    <input type=\"text\" class=\"form-control w-25\" id=\"title\" name=\"title\" value=\"{$employee['title']}\" style=\"border-color: black\">
+                </div>
+                <div class=\"mb-3\">
+                    <label for=\"about\" class=\"form-label\">About</label>
+                    <textarea class=\"form-control\" id=\"about\" rows=\"3\" name=\"about\" style=\"border-color: black\">{$employee['about']}</textarea>
+                </div>
+                <button type=\"submit\" class=\"btn btn-primary\">Save Changes</button>
+            </form>";
     }
+    
 
     //function edits entry in the csv file according to input from edit form
     function edit_member_info($file_path, $emp_num, $emp_name, $emp_position, $emp_desc){

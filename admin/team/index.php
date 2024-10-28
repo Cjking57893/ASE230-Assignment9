@@ -74,7 +74,7 @@ $tableHeaders = ($selectedFile === 'contact')
                         <td><?= htmlspecialchars($record['about']); ?></td>
                     <?php endif; ?>
                     <td>
-                        <a href="edit.php" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="edit.php?file=<?= $selectedFile ?>&index=<?= $index; ?>" class="btn btn-secondary btn-sm">Edit</a>
                         <a href="index.php?file=<?= $selectedFile ?>&delete=<?= $index; ?>" 
                            class="btn btn-danger btn-sm" 
                            onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
