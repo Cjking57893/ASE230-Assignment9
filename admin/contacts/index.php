@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../lib/utility.php';
 $teamFilePath = __DIR__ . '/../../data/teamCRUD.json';
 $contactFilePath = __DIR__ . '/../../data/contactCRUD.json';
 
-$selectedFile = isset($_POST['file']) ? $_POST['file'] : (isset($_GET['file']) ? $_GET['file'] : 'team');
+$selectedFile = 'contact';
 $filePath = ($selectedFile === 'contact') ? $contactFilePath : $teamFilePath;
 
 if (isset($_GET['delete'])) {
@@ -44,6 +44,9 @@ $tableHeaders = ($selectedFile === 'contact')
         </div>
     </form>
 
+    <div class="row justify-content-center">
+        <a href="create.php" class="btn btn-primary mb-3">Create</a>
+    </div>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -72,6 +75,7 @@ $tableHeaders = ($selectedFile === 'contact')
                         <td><?= htmlspecialchars($record['about']); ?></td>
                     <?php endif; ?>
                     <td>
+                        <a href="edit.php" class="btn btn-secondary btn-sm">Edit</a>
                         <a href="index.php?file=<?= $selectedFile ?>&delete=<?= $index; ?>" 
                            class="btn btn-danger btn-sm" 
                            onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>

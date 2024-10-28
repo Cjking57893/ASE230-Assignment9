@@ -1,7 +1,7 @@
 <?php
 class JSONHelper
 {
-    function addItem($filename, $newItem) {
+    public static function createItem($filename, $newItem) {
 
     // Checking if file exists and reading it if it does.
     if (file_exists($filename)) {
@@ -32,7 +32,7 @@ class JSONHelper
         return json_decode($jsonContent, true) ?? [];
     }
   
-    function updateItem($filename, $oldItem, $newItem) {
+    public static function updateItem($filename, $oldItem, $newItem) {
 
     // Checking if file exists and reading it if it does.
     if (file_exists($filename)) {
@@ -58,6 +58,7 @@ class JSONHelper
 
     $jsonData = json_encode($data, JSON_PRETTY_PRINT);
     file_put_contents($filename, $jsonData);
+    }
 
     private static function saveAll($filePath, $data)
     {
