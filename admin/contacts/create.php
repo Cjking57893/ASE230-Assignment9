@@ -1,5 +1,6 @@
 <?php
     ob_start();
+    require_once __DIR__ . '/../../lib/utility.php';
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
@@ -55,7 +56,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control w-25" id="phone" name="phone" style="border-color: black" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890">
+                        <input type="tel" class="form-control w-25" id="number" name="number" style="border-color: black" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890">
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email Address</label>
@@ -70,7 +71,11 @@
         <?php
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
             //call function to create team member
-            create_contact("../../data/contacts.csv", $_POST['name'], $_POST['phone'], $_POST['email']);
+            JSONHelper::createItem("../../data/contactCRUD.json", [
+                'name' => $_POST['name'], 
+                'number' => $_POST['number'], 
+                'email' => $_POST['email']
+            ]);            
             }
         ?>
         <!-- javascript -->

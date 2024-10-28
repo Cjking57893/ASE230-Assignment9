@@ -1,5 +1,6 @@
 <?php
     ob_start();
+    require_once __DIR__ . '/../../lib/utility.php';
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
@@ -50,20 +51,16 @@
             <h2>Enter employee information:</h2>
             <form method="post" action="">
                     <div class="mb-3">
-                        <label for="num" class="form-label">Employee Number</label>
-                        <input type="text" class="form-control w-25" id="num" name="num" style="border-color: black">
-                    </div>
-                    <div class="mb-3">
                         <label for="name" class="form-label">Employee Name</label>
                         <input type="text" class="form-control w-25" id="name"  name="name" style="border-color: black">
                     </div>
                     <div class="mb-3">
                         <label for="position" class="form-label">Employee Position</label>
-                        <input type="text" class="form-control w-25" id="position"  name="position" style="border-color: black">
+                        <input type="text" class="form-control w-25" id="title"  name="title" style="border-color: black">
                     </div>
                     <div class="mb-3">
                         <label for="desc" class="form-label">Bio</label>
-                        <textarea type="text" class="form-control" id="desc" rows="3" name="desc" style="border-color: black"></textarea>
+                        <textarea type="text" class="form-control" id="about" rows="3" name="about" style="border-color: black"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -72,7 +69,11 @@
         <?php
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
             //call function to create team member
-            create_team_member("../../data/team.csv", $_POST['num'], $_POST['name'], $_POST['position'], $_POST['desc']);
+            JSONHelper::createItem("../../data/teamCRUD.json", [
+                'name' => $_POST['name'], 
+                'title' => $_POST['title'], 
+                'about' => $_POST['about']
+            ]);
             }
         ?>
         <!-- javascript -->

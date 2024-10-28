@@ -1,6 +1,4 @@
 <?php 
-    ob_start();
-    require_once __DIR__ . '/../../lib/utility.php';
     include '../../lib/csv_functions.php';
     include '../../lib/readJsonFile.php';
     include '../../lib/plainfunction.php';
@@ -10,7 +8,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Admin - Contact Detail</title>
+        <title>Admin - Contacts Index</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="Premium Bootstrap 5 Landing Page Template" />
         <meta name="keywords" content="bootstrap 5, premium, marketing, multipurpose" />
@@ -41,29 +39,37 @@
                         <li class="nav-item">
                             <a href="index.php" class="nav-link active">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="../../index.php" class="nav-link active">Back To Main Page</a>
+                        </li>
                     </ul>
                 </div>
             </div>
             <!-- end container -->
         </nav>
         <!-- Navbar End -->
-         <div class="container position-absolute top-50 start-50 translate-middle">
-            <h2>Edit contact information:</h2>
-            <?php
-                create_form_for_editing_contact("../../data/contactCRUD.json", $_GET['index']);
+        <!--Display table with all team members-->
+        <div class="container col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <?php
+                        read_contacts_admin_index("../../data/contacts.csv");
+                    ?>
+                </tbody>
+            </table>
+        </div>
 
-                if($_SERVER['REQUEST_METHOD'] === 'POST'){
-                    //call function to edit team member
-                    JSONHelper::updateItem("../../data/contactCRUD.json", $_GET['index'], [
-                        'name' => $_POST['name'], 
-                        'number' => $_POST['number'], 
-                        'email' => $_POST['email']
-                    ]);
-                    //refresh the page to display new info
-                    header("refresh: 0");
-                }
-            ?>   
-         </div>
+        <div class="container">
+            <a href="create.php"><button type="button" class="btn btn-dark">+ Create</button></a>
+        </div>
+        
         <!-- javascript -->
         <script src="../../js/bootstrap.bundle.min.js"></script>
         <script src="../../js/smooth-scroll.polyfills.min.js"></script>
